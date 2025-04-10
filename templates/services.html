@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Services | Gym Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Gym Management</div>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="{{ url_for('services') }}">Services</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                {% if session.get('username') %}
+                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                    {% if session.get('is_admin') %}
+                        <li><a href="{{ url_for('admin.admin') }}">Admin</a></li>
+                    {% endif %}
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                    <li><a href="{{ url_for('register') }}">Register</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <main id="services">
+        <div class="services-container">
+            <div class="services-content">
+                <h2>Our Services</h2>
+                <div class="services-list">
+                    <div class="service-item">
+                        <h3>Personal Training</h3>
+                        <p>Get personalized training programs tailored to your needs.</p>
+                    </div>
+                    <div class="service-item">
+                        <h3>Group Classes</h3>
+                        <p>Join our group classes and stay motivated with others.</p>
+                    </div>
+                    <div class="service-item">
+                        <h3>Nutrition Plans</h3>
+                        <p>Receive customized nutrition plans to complement your workouts.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Gym Management System. All rights reserved.</p>
+    </footer>
+</body>
+</html>

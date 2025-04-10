@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Gym Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Gym Management</div>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="{{ url_for('services') }}">Services</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                {% if session.get('username') %}
+                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                    {% if session.get('is_admin') %}
+                        <li><a href="{{ url_for('admin.admin') }}">Admin</a></li>
+                    {% endif %}
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                    <li><a href="{{ url_for('register') }}">Register</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <main id="admin">
+        <div class="container">
+            <h2>Admin Dashboard</h2>
+            <p>Welcome, Admin. Manage the gym system here.</p>
+            <div class="admin-actions">
+                <a href="{{ url_for('admin.admin_users') }}" class="btn">View Users</a>
+                <a href="{{ url_for('admin.admin_services') }}" class="btn">Manage Services</a>
+                <a href="{{ url_for('admin.admin_messages') }}" class="btn">View Messages</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Gym Management System. All rights reserved.</p>
+    </footer>
+</body>
+</html>

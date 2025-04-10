@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | Gym Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Gym Management</div>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="{{ url_for('services') }}">Services</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                {% if session.get('username') %}
+                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                    {% if session.get('is_admin') %}
+                        <li><a href="{{ url_for('admin.admin') }}">Admin</a></li>
+                    {% endif %}
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                    <li><a href="{{ url_for('register') }}">Register</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <main id="register">
+        <div class="container">
+            <h2>Register</h2>
+            <form id="register-form" method="POST" action="{{ url_for('register') }}">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="phone">Phone Number</label>
+                <input type="text" id="phone" name="phone" required>
+
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+
+                <label for="plan">Select Plan</label>
+                <select id="plan" name="plan" required>
+                    {% for plan in plans %}
+                    <option value="{{ plan }}">{{ plan }}</option>
+                    {% endfor %}
+                </select>
+
+                <button type="submit" class="btn">Register</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Gym Management System. All rights reserved.</p>
+    </footer>
+</body>
+</html>
