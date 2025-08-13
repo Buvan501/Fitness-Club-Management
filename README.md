@@ -169,6 +169,16 @@ Fitness-Club-Management/
 | Member | `mike_member` | `member123` | Class booking and progress tracking |
 | Member | `lisa_member` | `member123` | Class booking and progress tracking |
 
+### Registering new users
+- On the registration page, you can now choose the account type (Member or Trainer). The appropriate role is assigned automatically.
+
+### Scheduling and Booking
+- View available classes on the Classes page and open the Schedule modal to see live schedule slots (fetched via AJAX).
+- Booking enforces class capacity per schedule/time.
+
+### Environment and .gitignore
+- A `.gitignore` is provided to exclude virtual environments, caches, and the local SQLite instance DB from version control. If you previously committed large or unwanted files, clean your history (see GitHub docs for filter-repo/BFG) and force-push.
+
 ## 📊 Database Schema
 
 ### Core Tables
