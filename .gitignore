@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+instance/*.db
+instance/*.sqlite
+instance/
+
+# Env
+.venv/
+venv/
+.env
+.env.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node/Front-end
+node_modules/
+
+# Flask/Build
+*.egg-info/
+dist/
+build/
+
+# Coverage/Tests
+.coverage
+htmlcov/
+.pytest_cache/
+
+# IDE
+.vscode/
+.idea/
