@@ -1,2 +1,11 @@
-flask
-os
+Flask==3.1.1
+Flask-Login==0.6.3
+Flask-SQLAlchemy==3.1.1
+Flask-WTF==1.2.1
+WTForms==3.1.1
+Werkzeug>=3.1.0
+pytest==8.3.2
+qrcode[pil]==7.4.2
+Pillow==10.0.1
+python-dateutil==2.8.2
+email-validator==2.0.0

@@ -1,0 +1,394 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Service | Gym Management System{% endblock %}
+
+{% block page_id %}add-service{% endblock %}
+
+{% block content %}
+    <section class="service-form-container">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="card service-form-card">
+                        <div class="card-body p-5">
+                            <div class="text-center mb-4">
+                                <i class="bi bi-plus-circle text-primary fs-1"></i>
+                                <h2 class="h3 mt-3">Add New Service</h2>
+                                <p class="text-muted">Create a comprehensive fitness service offering</p>
+                            </div>
+                            
+                            <form id="add-service-form" method="POST" action="{{ url_for('add_service') }}" novalidate>
+                                <!-- Basic Service Information -->
+                                <div class="row mb-4">
+                                    <div class="col-12">
+                                        <h4 class="text-primary mb-3"><i class="bi bi-info-circle me-2"></i>Service Details</h4>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="service_name" class="form-label">Service Name *</label>
+                                        <input type="text" class="form-control" id="service_name" name="service_name" required placeholder="e.g., Personal Training, Group Classes">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="service_category" class="form-label">Category *</label>
+                                        <select class="form-select" id="service_category" name="service_category" required>
+                                            <option value="">Select category</option>
+                                            <option value="personal_training">Personal Training</option>
+                                            <option value="group_classes">Group Classes</option>
+                                            <option value="nutrition">Nutrition & Diet</option>
+                                            <option value="cardio">Cardio Training</option>
+                                            <option value="strength">Strength Training</option>
+                                            <option value="yoga">Yoga & Flexibility</option>
+                                            <option value="recovery">Recovery & Wellness</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 mt-3">
+                                        <label for="service_description" class="form-label">Service Description *</label>
+                                        <textarea class="form-control" id="service_description" name="service_description" rows="3" required placeholder="Describe what this service offers, benefits, and what clients can expect"></textarea>
+                                    </div>
+                                </div>
+
+                                <!-- Trainer & Staff Requirements -->
+                                <div class="row mb-4">
+                                    <div class="col-12">
+                                        <h4 class="text-primary mb-3"><i class="bi bi-people me-2"></i>Trainer & Staff</h4>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="trainer_required" class="form-label">Trainer Required *</label>
+                                        <select class="form-select" id="trainer_required" name="trainer_required" required>
+                                            <option value="">Select requirement</option>
+                                            <option value="certified_personal_trainer">Certified Personal Trainer</option>
+                                            <option value="group_fitness_instructor">Group Fitness Instructor</option>
+                                            <option value="yoga_instructor">Yoga Instructor</option>
+                                            <option value="nutritionist">Nutritionist</option>
+                                            <option value="physiotherapist">Physiotherapist</option>
+                                            <option value="no_trainer">No Trainer Required</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="max_participants" class="form-label">Maximum Participants</label>
+                                        <input type="number" class="form-control" id="max_participants" name="max_participants" min="1" placeholder="Leave empty for unlimited">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="trainer_ratio" class="form-label">Trainer to Client Ratio</label>
+                                        <input type="text" class="form-control" id="trainer_ratio" name="trainer_ratio" placeholder="e.g., 1:1, 1:5, 1:10">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="experience_level" class="form-label">Required Experience Level</label>
+                                        <select class="form-select" id="experience_level" name="experience_level">
+                                            <option value="">Select level</option>
+                                            <option value="beginner">Beginner</option>
+                                            <option value="intermediate">Intermediate</option>
+                                            <option value="advanced">Advanced</option>
+                                            <option value="all_levels">All Levels</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Scheduling & Timing -->
+                                <div class="row mb-4">
+                                    <div class="col-12">
+                                        <h4 class="text-primary mb-3"><i class="bi bi-clock me-2"></i>Schedule & Timing</h4>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="session_duration" class="form-label">Session Duration (minutes) *</label>
+                                        <input type="number" class="form-control" id="session_duration" name="session_duration" required min="15" max="180" placeholder="30">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="sessions_per_week" class="form-label">Sessions per Week</label>
+                                        <input type="number" class="form-control" id="sessions_per_week" name="sessions_per_week" min="1" max="7" placeholder="3">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="available_days" class="form-label">Available Days</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="available_days" value="monday" id="monday">
+                                            <label class="form-check-label" for="monday">Monday</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="available_days" value="tuesday" id="tuesday">
+                                            <label class="form-check-label" for="tuesday">Tuesday</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="available_days" value="wednesday" id="wednesday">
+                                            <label class="form-check-label" for="wednesday">Wednesday</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="available_days" value="thursday" id="thursday">
+                                            <label class="form-check-label" for="thursday">Thursday</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="available_days" value="friday" id="friday">
+                                            <label class="form-check-label" for="friday">Friday</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="available_days" value="saturday" id="saturday">
+                                            <label class="form-check-label" for="saturday">Saturday</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="available_days" value="sunday" id="sunday">
+                                            <label class="form-check-label" for="sunday">Sunday</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="time_slots" class="form-label">Preferred Time Slots</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="time_slots" value="early_morning" id="early_morning">
+                                            <label class="form-check-label" for="early_morning">Early Morning (6-9 AM)</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="time_slots" value="late_morning" id="late_morning">
+                                            <label class="form-check-label" for="late_morning">Late Morning (9-12 PM)</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="time_slots" value="afternoon" id="afternoon">
+                                            <label class="form-check-label" for="afternoon">Afternoon (12-5 PM)</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="time_slots" value="evening" id="evening">
+                                            <label class="form-check-label" for="evening">Evening (5-9 PM)</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="time_slots" value="night" id="night">
+                                            <label class="form-check-label" for="night">Night (9-11 PM)</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Fitness Goals & Targets -->
+                                <div class="row mb-4">
+                                    <div class="col-12">
+                                        <h4 class="text-primary mb-3"><i class="bi bi-target me-2"></i>Fitness Goals & Targets</h4>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="primary_goals" class="form-label">Primary Fitness Goals</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="primary_goals" value="weight_loss" id="weight_loss">
+                                            <label class="form-check-label" for="weight_loss">Weight Loss</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="primary_goals" value="muscle_gain" id="muscle_gain">
+                                            <label class="form-check-label" for="muscle_gain">Muscle Gain</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="primary_goals" value="endurance" id="endurance">
+                                            <label class="form-check-label" for="endurance">Endurance & Stamina</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="primary_goals" value="flexibility" id="flexibility">
+                                            <label class="form-check-label" for="flexibility">Flexibility & Mobility</label>
+                                        </div>
+                                            <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="primary_goals" value="rehabilitation" id="rehabilitation">
+                                            <label class="form-check-label" for="rehabilitation">Rehabilitation</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="primary_goals" value="general_fitness" id="general_fitness">
+                                            <label class="form-check-label" for="general_fitness">General Fitness</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="target_weight_range" class="form-label">Target Weight Range (lbs)</label>
+                                        <div class="row g-2">
+                                            <div class="col-6">
+                                                <input type="number" class="form-control" name="min_weight" placeholder="Min weight">
+                                            </div>
+                                            <div class="col-6">
+                                                <input type="number" class="form-control" name="max_weight" placeholder="Max weight">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="fitness_level" class="form-label">Target Fitness Level</label>
+                                        <select class="form-select" id="fitness_level" name="fitness_level">
+                                            <option value="">Select level</option>
+                                            <option value="beginner">Beginner (0-6 months)</option>
+                                            <option value="intermediate">Intermediate (6 months - 2 years)</option>
+                                            <option value="advanced">Advanced (2+ years)</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="age_group" class="form-label">Target Age Group</label>
+                                        <select class="form-select" id="age_group" name="age_group">
+                                            <option value="">Select age group</option>
+                                            <option value="teens">Teens (13-19)</option>
+                                            <option value="young_adults">Young Adults (20-35)</option>
+                                            <option value="adults">Adults (35-50)</option>
+                                            <option value="seniors">Seniors (50+)</option>
+                                            <option value="all_ages">All Ages</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Equipment & Facilities -->
+                                <div class="row mb-4">
+                                    <div class="col-12">
+                                        <h4 class="text-primary mb-3"><i class="bi bi-gear me-2"></i>Equipment & Facilities</h4>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="required_equipment" class="form-label">Required Equipment</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="required_equipment" value="dumbbells" id="dumbbells">
+                                            <label class="form-check-label" for="dumbbells">Dumbbells</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="required_equipment" value="barbells" id="barbells">
+                                            <label class="form-check-label" for="barbells">Barbells</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="required_equipment" value="cardio_machines" id="cardio_machines">
+                                            <label class="form-check-label" for="cardio_machines">Cardio Machines</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="required_equipment" value="yoga_mats" id="yoga_mats">
+                                            <label class="form-check-label" for="yoga_mats">Yoga Mats</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="required_equipment" value="resistance_bands" id="resistance_bands">
+                                            <label class="form-check-label" for="resistance_bands">Resistance Bands</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="required_equipment" value="none" id="no_equipment">
+                                            <label class="form-check-label" for="no_equipment">No Equipment Required</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="facility_requirements" class="form-label">Facility Requirements</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="facility_requirements" value="gym_floor" id="gym_floor">
+                                            <label class="form-check-label" for="gym_floor">Gym Floor Space</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="facility_requirements" value="studio" id="studio">
+                                            <label class="form-check-label" for="studio">Studio Room</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="facility_requirements" value="outdoor" id="outdoor">
+                                            <label class="form-check-label" for="outdoor">Outdoor Space</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="facility_requirements" value="pool" id="pool">
+                                            <label class="form-check-label" for="pool">Swimming Pool</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="facility_requirements" value="track" id="track">
+                                            <label class="form-check-label" for="track">Running Track</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Pricing & Packages -->
+                                <div class="row mb-4">
+                                    <div class="col-12">
+                                        <h4 class="text-primary mb-3"><i class="bi bi-currency-dollar me-2"></i>Pricing & Packages</h4>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="pricing_model" class="form-label">Pricing Model *</label>
+                                        <select class="form-select" id="pricing_model" name="pricing_model" required>
+                                            <option value="">Select pricing model</option>
+                                            <option value="per_session">Per Session</option>
+                                            <option value="per_month">Per Month</option>
+                                            <option value="per_package">Package Deal</option>
+                                            <option value="subscription">Subscription</option>
+                                            <option value="free">Free (Included in Membership)</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="base_price" class="form-label">Base Price ($)</label>
+                                        <input type="number" class="form-control" id="base_price" name="base_price" min="0" step="0.01" placeholder="0.00">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="package_sessions" class="form-label">Sessions in Package</label>
+                                        <input type="number" class="form-control" id="package_sessions" name="package_sessions" min="1" placeholder="e.g., 10 sessions">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="package_price" class="form-label">Package Price ($)</label>
+                                        <input type="number" class="form-control" id="package_price" name="package_price" min="0" step="0.01" placeholder="0.00">
+                                    </div>
+                                </div>
+
+                                <!-- Additional Information -->
+                                <div class="row mb-4">
+                                    <div class="col-12">
+                                        <h4 class="text-primary mb-3"><i class="bi bi-plus-circle me-2"></i>Additional Information</h4>
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="special_requirements" class="form-label">Special Requirements or Notes</label>
+                                        <textarea class="form-control" id="special_requirements" name="special_requirements" rows="3" placeholder="Any additional requirements, restrictions, or special considerations for this service"></textarea>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="service_image" class="form-label">Service Image</label>
+                                        <input type="file" class="form-control" id="service_image" name="service_image" accept="image/*">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="video_url" class="form-label">Promotional Video URL</label>
+                                        <input type="url" class="form-control" id="video_url" name="video_url" placeholder="YouTube or Vimeo link">
+                                    </div>
+                                </div>
+
+                                <!-- Form Actions -->
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        <button type="submit" class="btn btn-primary btn-lg me-3">
+                                            <i class="bi bi-check-circle me-2"></i>Create Service
+                                        </button>
+                                        <a href="{{ url_for('admin.admin_services') }}" class="btn btn-outline-secondary btn-lg">
+                                            <i class="bi bi-arrow-left me-2"></i>Cancel
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts_defer %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('add-service-form');
+    const pricingModel = document.getElementById('pricing_model');
+    const packageFields = document.querySelectorAll('[name*="package"]');
+
+    function togglePackageFields() {
+        const isPackage = pricingModel.value === 'per_package';
+        packageFields.forEach(field => {
+            const wrapper = field.closest('.col-md-6');
+            if (wrapper) wrapper.style.display = isPackage ? 'block' : 'none';
+        });
+    }
+
+    if (pricingModel) {
+        pricingModel.addEventListener('change', togglePackageFields);
+        togglePackageFields();
+    }
+
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const requiredFields = form.querySelectorAll('[required]');
+            let isValid = true;
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    field.classList.remove('is-invalid');
+                }
+            });
+
+            // Always prevent default (demo mode)
+            e.preventDefault();
+
+            if (!isValid) {
+                alert('Please fill in all required fields marked with *');
+                return;
+            }
+
+            alert('Service created (demo). In a real app this would be saved.');
+            form.reset();
+            togglePackageFields();
+        });
+    }
+});
+</script>
+{% endblock %}

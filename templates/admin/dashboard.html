@@ -1,0 +1,425 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard | FitClub Pro{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h2 mb-0">Admin Dashboard</h1>
+                    <p class="text-muted">Welcome back, {{ current_user.full_name }}</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#announcementModal">
+                        <i class="bi bi-megaphone me-2"></i>New Announcement
+                    </button>
+                    <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#quickStatsModal">
+                        <i class="bi bi-graph-up me-2"></i>Quick Stats
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-primary bg-gradient rounded-3 p-3">
+                                <i class="bi bi-people text-white fs-4"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="card-title text-muted mb-1">Total Members</h5>
+                            <h2 class="mb-0 fw-bold text-primary">{{ total_members }}</h2>
+                            <small class="text-success">
+                                <i class="bi bi-arrow-up me-1"></i>12% from last month
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-success bg-gradient rounded-3 p-3">
+                                <i class="bi bi-person-badge text-white fs-4"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="card-title text-muted mb-1">Active Trainers</h5>
+                            <h2 class="mb-0 fw-bold text-success">{{ total_trainers }}</h2>
+                            <small class="text-success">
+                                <i class="bi bi-arrow-up me-1"></i>8% from last month
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-warning bg-gradient rounded-3 p-3">
+                                <i class="bi bi-calendar-event text-white fs-4"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="card-title text-muted mb-1">Active Classes</h5>
+                            <h2 class="mb-0 fw-bold text-warning">{{ total_classes }}</h2>
+                            <small class="text-success">
+                                <i class="bi bi-arrow-up me-1"></i>15% from last month
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-info bg-gradient rounded-3 p-3">
+                                <i class="bi bi-calendar-check text-white fs-4"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="card-title text-muted mb-1">Today's Bookings</h5>
+                            <h2 class="mb-0 fw-bold text-info">{{ total_bookings }}</h2>
+                            <small class="text-success">
+                                <i class="bi bi-arrow-up me-1"></i>23% from yesterday
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts and Analytics Row -->
+    <div class="row mb-4">
+        <div class="col-xl-8 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent border-0">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-graph-up me-2"></i>Monthly Revenue Overview
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent border-0">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-pie-chart me-2"></i>Membership Distribution
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="membershipChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity Row -->
+    <div class="row">
+        <div class="col-xl-6 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-credit-card me-2"></i>Recent Payments
+                    </h5>
+                    <a href="{{ url_for('admin_payments') }}" class="btn btn-sm btn-outline-primary">View All</a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Member</th>
+                                    <th>Amount</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for payment in recent_payments %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-sm bg-primary rounded-circle d-flex align-items-center justify-content-center me-2">
+                                                <span class="text-white fw-bold">{{ payment.user.first_name[0] }}{{ payment.user.last_name[0] }}</span>
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold">{{ payment.user.full_name }}</div>
+                                                <small class="text-muted">{{ payment.user.email }}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="fw-bold text-success">${{ "%.2f"|format(payment.amount) }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-light text-dark">{{ payment.payment_type }}</span>
+                                    </td>
+                                    <td>
+                                        {% if payment.status == 'completed' %}
+                                            <span class="badge bg-success">Completed</span>
+                                        {% elif payment.status == 'pending' %}
+                                            <span class="badge bg-warning">Pending</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">{{ payment.status|title }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <small class="text-muted">{{ payment.transaction_date.strftime('%b %d, %Y') }}</small>
+                                    </td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted py-4">
+                                        <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                                        No recent payments
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-6 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-megaphone me-2"></i>Recent Announcements
+                    </h5>
+                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#announcementModal">New</button>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        {% for announcement in recent_announcements %}
+                        <div class="list-group-item border-0">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">{{ announcement.title }}</h6>
+                                    <p class="mb-1 text-muted">{{ announcement.message[:100] }}{% if announcement.message|length > 100 %}...{% endif %}</p>
+                                    <small class="text-muted">
+                                        <i class="bi bi-person me-1"></i>{{ announcement.author.full_name }} • 
+                                        <i class="bi bi-calendar me-1"></i>{{ announcement.created_at.strftime('%b %d, %Y') }}
+                                    </small>
+                                </div>
+                                <span class="badge bg-{{ 'success' if announcement.is_active else 'secondary' }}">
+                                    {{ 'Active' if announcement.is_active else 'Inactive' }}
+                                </span>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="text-center text-muted py-4">
+                            <i class="bi bi-megaphone fs-1 d-block mb-2"></i>
+                            No recent announcements
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Announcement Modal -->
+<div class="modal fade" id="announcementModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">New Announcement</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="announcementForm">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="announcementTitle" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="announcementTitle" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="announcementMessage" class="form-label">Message</label>
+                        <textarea class="form-control" id="announcementMessage" rows="4" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="targetAudience" class="form-label">Target Audience</label>
+                        <select class="form-select" id="targetAudience">
+                            <option value="all">All Users</option>
+                            <option value="members">Members Only</option>
+                            <option value="trainers">Trainers Only</option>
+                            <option value="admins">Admins Only</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Publish Announcement</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Stats Modal -->
+<div class="modal fade" id="quickStatsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Quick Statistics</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <h3 class="text-primary">{{ total_members }}</h3>
+                                <p class="mb-0">Total Members</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <h3 class="text-success">{{ total_trainers }}</h3>
+                                <p class="mb-0">Active Trainers</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <h3 class="text-warning">{{ total_classes }}</h3>
+                                <p class="mb-0">Active Classes</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <h3 class="text-info">{{ total_bookings }}</h3>
+                                <p class="mb-0">Today's Bookings</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Revenue Chart
+const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+const revenueChart = new Chart(revenueCtx, {
+    type: 'line',
+    data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [{
+            label: 'Revenue',
+            data: [12000, 19000, 15000, 25000, 22000, 30000],
+            borderColor: 'rgb(75, 192, 192)',
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            tension: 0.4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    callback: function(value) {
+                        return '$' + value.toLocaleString();
+                    }
+                }
+            }
+        }
+    }
+});
+
+// Membership Distribution Chart
+const membershipCtx = document.getElementById('membershipChart').getContext('2d');
+const membershipChart = new Chart(membershipCtx, {
+    type: 'doughnut',
+    data: {
+        labels: ['Basic', 'Premium', 'VIP'],
+        datasets: [{
+            data: [45, 35, 20],
+            backgroundColor: [
+                'rgb(255, 99, 132)',
+                'rgb(54, 162, 235)',
+                'rgb(255, 205, 86)'
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            }
+        }
+    }
+});
+
+// Announcement Form Handler
+document.getElementById('announcementForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const title = document.getElementById('announcementTitle').value;
+    const message = document.getElementById('announcementMessage').value;
+    const targetAudience = document.getElementById('targetAudience').value;
+    
+    // Here you would typically send this data to your backend
+    console.log('New announcement:', { title, message, targetAudience });
+    
+    // Show success message and close modal
+    alert('Announcement published successfully!');
+    bootstrap.Modal.getInstance(document.getElementById('announcementModal')).hide();
+    
+    // Reset form
+    this.reset();
+});
+</script>
+{% endblock %}

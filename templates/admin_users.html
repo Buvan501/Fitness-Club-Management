@@ -1,63 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Users | Gym Management System</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
-    <header>
-        <nav>
-            <div class="logo">Gym Management</div>
-            <ul>
-                <li><a href="{{ url_for('home') }}">Home</a></li>
-                <li><a href="{{ url_for('about') }}">About</a></li>
-                <li><a href="{{ url_for('services') }}">Services</a></li>
-                <li><a href="{{ url_for('contact') }}">Contact</a></li>
-                {% if session.get('username') %}
-                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
-                    {% if session.get('is_admin') %}
-                        <li><a href="{{ url_for('admin.admin') }}">Admin</a></li>
-                    {% endif %}
-                {% else %}
-                    <li><a href="{{ url_for('login') }}">Login</a></li>
-                    <li><a href="{{ url_for('register') }}">Register</a></li>
-                {% endif %}
-            </ul>
-        </nav>
-    </header>
+{% extends 'base.html' %}
 
-    <main id="admin-users">
-        <div class="container">
-            <h2>Admin - View Users</h2>
-            <table>
-                <thead>
+{% block title %}Admin - Users | Gym Management System{% endblock %}
+
+{% block page_id %}admin-users{% endblock %}
+
+{% block content %}
+    <section class="container py-5">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h2 class="fw-bold m-0">Users</h2>
+            <div>
+                <span class="badge rounded-pill text-bg-secondary">Read-only demo</span>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead class="table-light">
                     <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Phone</th>
-                        <th>Email</th>
-                        <th>Plan</th>
+                        <th scope="col">#</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Plan</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for username, user in users_db.items() %}
                     <tr>
-                        <td>{{ loop.index }}</td>
+                        <th scope="row">{{ loop.index }}</th>
+                        <td><span class="fw-semibold">{{ username }}</span></td>
                         <td>{{ user.name }}</td>
                         <td>{{ user.phone }}</td>
                         <td>{{ user.email }}</td>
-                        <td>{{ user.plan }}</td>
+                        <td><span class="badge text-bg-primary">{{ user.plan }}</span></td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
-    </main>
-
-    <footer>
-        <p>&copy; 2025 Gym Management System. All rights reserved.</p>
-    </footer>
-</body>
-</html>
+    </section>
+{% endblock %}

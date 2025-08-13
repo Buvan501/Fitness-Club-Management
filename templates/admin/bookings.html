@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Bookings | Admin{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h2 class="mb-4">Bookings</h2>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Member</th>
+          <th>Class</th>
+          <th>Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for b in bookings %}
+        <tr>
+          <td>{{ b.user.full_name }}</td>
+          <td>{{ b.class_schedule.class_.name }}</td>
+          <td>{{ b.booking_date.strftime('%Y-%m-%d') }}</td>
+          <td>{{ b.status }}</td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="4" class="text-center text-muted">No bookings</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

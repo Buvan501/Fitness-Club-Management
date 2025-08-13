@@ -1,49 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Messages | Gym Management System</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
-    <header>
-        <nav>
-            <div class="logo">Gym Management</div>
-            <ul>
-                <li><a href="{{ url_for('home') }}">Home</a></li>
-                <li><a href="{{ url_for('about') }}">About</a></li>
-                <li><a href="{{ url_for('services') }}">Services</a></li>
-                <li><a href="{{ url_for('contact') }}">Contact</a></li>
-                {% if session.get('username') %}
-                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
-                    {% if session.get('is_admin') %}
-                        <li><a href="{{ url_for('admin.admin') }}">Admin</a></li>
-                    {% endif %}
-                {% else %}
-                    <li><a href="{{ url_for('login') }}">Login</a></li>
-                    <li><a href="{{ url_for('register') }}">Register</a></li>
-                {% endif %}
-            </ul>
-        </nav>
-    </header>
+{% extends 'base.html' %}
 
-    <main id="admin-messages">
-        <div class="container">
-            <h2>Admin - View Messages</h2>
-            <table>
-                <thead>
+{% block title %}Admin - Messages | Gym Management System{% endblock %}
+
+{% block page_id %}admin-messages{% endblock %}
+
+{% block content %}
+    <section class="container py-5">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h2 class="fw-bold m-0">Messages</h2>
+            <span class="badge rounded-pill text-bg-secondary">Read-only demo</span>
+        </div>
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead class="table-light">
                     <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Message</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Message</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for message in messages %}
                     <tr>
-                        <td>{{ message.id }}</td>
+                        <th scope="row">{{ message.id }}</th>
                         <td>{{ message.name }}</td>
                         <td>{{ message.email }}</td>
                         <td>{{ message.message }}</td>
@@ -52,10 +32,5 @@
                 </tbody>
             </table>
         </div>
-    </main>
-
-    <footer>
-        <p>&copy; 2025 Gym Management System. All rights reserved.</p>
-    </footer>
-</body>
-</html>
+    </section>
+{% endblock %}

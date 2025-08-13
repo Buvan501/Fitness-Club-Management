@@ -1,47 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard | Gym Management System</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
-    <header>
-        <nav>
-            <div class="logo">Gym Management</div>
-            <ul>
-                <li><a href="{{ url_for('home') }}">Home</a></li>
-                <li><a href="{{ url_for('about') }}">About</a></li>
-                <li><a href="{{ url_for('services') }}">Services</a></li>
-                <li><a href="{{ url_for('contact') }}">Contact</a></li>
-                {% if session.get('username') %}
-                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
-                    {% if session.get('is_admin') %}
-                        <li><a href="{{ url_for('admin.admin') }}">Admin</a></li>
-                    {% endif %}
-                {% else %}
-                    <li><a href="{{ url_for('login') }}">Login</a></li>
-                    <li><a href="{{ url_for('register') }}">Register</a></li>
-                {% endif %}
-            </ul>
-        </nav>
-    </header>
+{% extends 'base.html' %}
 
-    <main id="admin">
-        <div class="container">
-            <h2>Admin Dashboard</h2>
-            <p>Welcome, Admin. Manage the gym system here.</p>
-            <div class="admin-actions">
-                <a href="{{ url_for('admin.admin_users') }}" class="btn">View Users</a>
-                <a href="{{ url_for('admin.admin_services') }}" class="btn">Manage Services</a>
-                <a href="{{ url_for('admin.admin_messages') }}" class="btn">View Messages</a>
+{% block title %}Admin Dashboard | Gym Management System{% endblock %}
+
+{% block page_id %}admin{% endblock %}
+
+{% block content %}
+    <section class="container py-5">
+        <h2 class="fw-bold mb-3">Admin Dashboard</h2>
+        <p class="text-muted">Quick overview of the system. Use the cards below to navigate.</p>
+        <div class="row g-4 mt-2">
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex align-items-center mb-2"><i class="bi bi-people-fill text-primary me-2"></i><h5 class="card-title m-0">Users</h5></div>
+                        <p class="text-muted mb-4">Manage registered members.</p>
+                        <div class="mt-auto d-flex align-items-center justify-content-between">
+                            <span class="badge text-bg-primary">{{ users_count }} total</span>
+                            <a href="{{ url_for('admin.admin_users') }}" class="btn btn-outline-primary btn-sm">View</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex align-items-center mb-2"><i class="bi bi-list-task text-success me-2"></i><h5 class="card-title m-0">Services</h5></div>
+                        <p class="text-muted mb-4">Add or update offered services.</p>
+                        <div class="mt-auto d-flex align-items-center justify-content-between">
+                            <span class="badge text-bg-success">{{ services_count }} active</span>
+                            <a href="{{ url_for('admin.admin_services') }}" class="btn btn-outline-success btn-sm">Manage</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex align-items-center mb-2"><i class="bi bi-chat-dots-fill text-warning me-2"></i><h5 class="card-title m-0">Messages</h5></div>
+                        <p class="text-muted mb-4">View inquiries and feedback.</p>
+                        <div class="mt-auto d-flex align-items-center justify-content-between">
+                            <span class="badge text-bg-warning">{{ messages_count }} new</span>
+                            <a href="{{ url_for('admin.admin_messages') }}" class="btn btn-outline-warning btn-sm">View</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </main>
-
-    <footer>
-        <p>&copy; 2025 Gym Management System. All rights reserved.</p>
-    </footer>
-</body>
-</html>
+    </section>
+{% endblock %}

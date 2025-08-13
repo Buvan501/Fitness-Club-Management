@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Members | Admin{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h2 class="mb-4">Members</h2>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Membership</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for m in members %}
+        <tr>
+          <td>{{ m.user.full_name }}</td>
+          <td>{{ m.user.email }}</td>
+          <td>{{ m.membership_type }}</td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="3" class="text-center text-muted">No members</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

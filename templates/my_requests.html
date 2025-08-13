@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}My Service Requests | Gym Management System{% endblock %}
+
+{% block page_id %}my-requests{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="fw-bold m-0">My Service Requests</h2>
+        <a href="{{ url_for('add_service') }}" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1"></i>New Request</a>
+    </div>
+    {% if requests %}
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Service</th>
+                    <th>Category</th>
+                    <th>Duration</th>
+                    <th>Sessions/Week</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in requests %}
+                <tr>
+                    <td class="fw-semibold">{{ r.service_name }}</td>
+                    <td>{{ r.service_category }}</td>
+                    <td>{{ r.session_duration }} mins</td>
+                    <td>{{ r.sessions_per_week or '-' }}</td>
+                    <td><span class="badge text-bg-secondary">{{ r.status }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info">You have not submitted any service requests yet.</div>
+    {% endif %}
+</section>
+{% endblock %}
+

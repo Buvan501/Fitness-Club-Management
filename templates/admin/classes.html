@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Classes | Admin{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h2 class="mb-4">Classes</h2>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Trainer</th>
+          <th>Category</th>
+          <th>Capacity</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in classes %}
+        <tr>
+          <td>{{ c.name }}</td>
+          <td>{{ c.trainer.user.full_name }}</td>
+          <td>{{ c.category }}</td>
+          <td>{{ c.max_capacity }}</td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="4" class="text-center text-muted">No classes</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

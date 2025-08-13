@@ -1,53 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
-    <header>
-        <nav>
-            <div class="menu-icon" onclick="toggleMenu()">
-                &#9776;
+{% extends 'base.html' %}
+
+{% block title %}Login | Gym Management System{% endblock %}
+
+{% block page_id %}login{% endblock %}
+
+{% block content %}
+    <section class="service-form-container">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6 col-xl-5">
+                    <div class="card service-form-card">
+                        <div class="card-body p-5">
+                            <div class="text-center mb-4">
+                                <i class="bi bi-person-circle text-primary fs-1"></i>
+                                <h2 class="h3 mt-3">Welcome Back</h2>
+                                <p class="text-muted">Sign in to your account</p>
+                            </div>
+                            <form id="login-form" method="POST" action="{{ url_for('login') }}" novalidate>
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">Username</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                        <input type="text" class="form-control" id="username" name="username" required aria-required="true" placeholder="Enter your username" autocomplete="username" autofocus>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="password" class="form-label">Password</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                        <input type="password" class="form-control" id="password" name="password" required aria-required="true" placeholder="Enter your password" autocomplete="current-password">
+                                        <button class="btn btn-outline-secondary" type="button" id="toggle-password" aria-label="Show password" aria-pressed="false"><i class="bi bi-eye"></i></button>
+                                    </div>
+                                </div>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+                                    </button>
+                                </div>
+                                <div class="text-center mt-4">
+                                    <p class="mb-0">Don't have an account? <a href="{{ url_for('register') }}" class="text-decoration-none">Register here</a></p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="logo">Gym Management</div>
-            <ul class="menu">
-                <li><a href="{{ url_for('home') }}">Home</a></li>
-                <li><a href="{{ url_for('about') }}">About</a></li>
-                <li><a href="{{ url_for('services') }}">Services</a></li>
-                <li><a href="{{ url_for('contact') }}">Contact</a></li>
-            </ul>
-            <ul class="auth">
-                {% if session.get('username') %}
-                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
-                {% else %}
-                    <li><a href="{{ url_for('login') }}">Login</a></li>
-                    <li><a href="{{ url_for('register') }}">Register</a></li>
-                {% endif %}
-            </ul>
-        </nav>
-    </header>
-
-    <main id="login">
-        <div class="login-container">
-            <h2>Login</h2>
-            <form id="login-form" method="POST" action="{{ url_for('login') }}">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required>
-
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
-
-                <button type="submit" class="btn">Login</button>
-            </form>
         </div>
-    </main>
-
-    <footer>
-        <p>&copy; 2025 Gym Management System. All rights reserved.</p>
-    </footer>
-
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
-</body>
-</html>
+    </section>
+{% endblock %}

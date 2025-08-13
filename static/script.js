@@ -1,49 +1,53 @@
-let currentSlide = 0;
-
-function showSlide(index) {
-    const slides = document.querySelectorAll('.slide');
-    if (index >= slides.length) {
-        currentSlide = 0;
-    } else if (index < 0) {
-        currentSlide = slides.length - 1;
-    } else {
-        currentSlide = index;
-    }
-    slides.forEach((slide, i) => {
-        slide.classList.toggle('active', i === currentSlide);
-    });
-}
-
-function moveSlide(direction) {
-    showSlide(currentSlide + direction);
-}
-
 document.addEventListener('DOMContentLoaded', () => {
-    showSlide(currentSlide);
-    setInterval(() => {
-        moveSlide(1);
-    }, 5000); // Change slide every 5 seconds
-});
+    // Enable tooltips
+    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => {
+        new bootstrap.Tooltip(el);
+    });
 
-document.getElementById('contact-form').addEventListener('submit', function(event) {
-    event.preventDefault();
-    alert('Thank you for your message! We will get back to you shortly.');
-});
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            alert('Thank you for your message! We will get back to you shortly.');
+            contactForm.reset();
+        });
+    }
 
-document.getElementById('login-form').addEventListener('submit', function(event) {
-    event.preventDefault();
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
+    const loginForm = document.getElementById('login-form');
+    if (loginForm) {
+        // Minimal validation feedback
+        loginForm.addEventListener('submit', function(e) {
+            const required = loginForm.querySelectorAll('[required]');
+            let isValid = true;
+            required.forEach(f => {
+                if (!f.value.trim()) {
+                    f.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    f.classList.remove('is-invalid');
+                }
+            });
+            if (!isValid) {
+                e.preventDefault();
+            }
+        });
 
-    if (username === 'admin' && password === 'admin123') {
-        alert('Login successful! Welcome, ' + username + '!');
-    } else {
-        alert('Invalid username or password. Please try again.');
+        // Show/hide password
+        const toggle = document.getElementById('toggle-password');
+        const password = document.getElementById('password');
+        if (toggle && password) {
+            toggle.addEventListener('click', () => {
+                const showing = password.getAttribute('type') === 'text';
+                password.setAttribute('type', showing ? 'password' : 'text');
+                toggle.setAttribute('aria-pressed', String(!showing));
+                const icon = toggle.querySelector('i');
+                if (icon) {
+                    icon.classList.toggle('bi-eye');
+                    icon.classList.toggle('bi-eye-slash');
+                }
+            });
+        }
     }
 });
 
-// script.js
-function toggleMenu() {
-    const menu = document.querySelector('.menu');
-    menu.classList.toggle('show');
-}
+// No custom JS needed for Bootstrap navbar; Bootstrap handles toggling
