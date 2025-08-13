@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Profile | Member{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h2 class="mb-4">Profile</h2>
+  <div class="card">
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="text-muted">Name</div>
+          <div class="fw-semibold">{{ member.user.full_name }}</div>
+        </div>
+        <div class="col-md-6">
+          <div class="text-muted">Email</div>
+          <div class="fw-semibold">{{ member.user.email }}</div>
+        </div>
+        <div class="col-md-6">
+          <div class="text-muted">Membership</div>
+          <div class="fw-semibold">{{ member.membership_type }}</div>
+        </div>
+        <div class="col-md-6">
+          <div class="text-muted">Member ID</div>
+          <div class="fw-semibold">{{ member.membership_number }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

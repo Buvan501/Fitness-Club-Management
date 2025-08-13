@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin - Messages | Gym Management System{% endblock %}
+
+{% block page_id %}admin-messages{% endblock %}
+
+{% block content %}
+    <section class="container py-5">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h2 class="fw-bold m-0">Messages</h2>
+            <span class="badge rounded-pill text-bg-secondary">Read-only demo</span>
+        </div>
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Message</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for message in messages %}
+                    <tr>
+                        <th scope="row">{{ message.id }}</th>
+                        <td>{{ message.name }}</td>
+                        <td>{{ message.email }}</td>
+                        <td>{{ message.message }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+{% endblock %}

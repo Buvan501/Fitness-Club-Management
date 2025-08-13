@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}My Classes | Member{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h2 class="mb-4">Available Classes</h2>
+  <p class="text-muted">Browse and book available classes from the services page.</p>
+  <a href="{{ url_for('services') }}" class="btn btn-primary"><i class="bi bi-calendar-plus me-2"></i>Browse Classes</a>
+</div>
+{% endblock %}

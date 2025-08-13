@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}Home | Gym Management System{% endblock %}
+
+{% block page_id %}home{% endblock %}
+
+{% block content %}
+    <section class="container">
+        <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" aria-label="Featured images">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner rounded-4 shadow-sm">
+                <div class="carousel-item active">
+                    <img src="{{ url_for('static', filename='gym1.jpg') }}" class="d-block w-100" alt="Gym equipment and weights" />
+                    <div class="carousel-caption text-start">
+                        <h1 class="display-5 fw-bold">Elevate Your Fitness</h1>
+                        <p class="lead">Modern equipment, expert trainers, personalized plans.</p>
+                        <a href="{{ url_for('services') }}" class="btn btn-primary btn-lg">Explore Services</a>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="{{ url_for('static', filename='gym2.jpg') }}" class="d-block w-100" alt="Group class session" />
+                    <div class="carousel-caption">
+                        <h2 class="fw-semibold">Train Together</h2>
+                        <p>Stay motivated in energizing group classes.</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="{{ url_for('static', filename='gym3.jpg') }}" class="d-block w-100" alt="Personal training session" />
+                    <div class="carousel-caption text-end">
+                        <h2 class="fw-semibold">Personalized Coaching</h2>
+                        <p>1:1 sessions tailored to your goals.</p>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </section>
+
+    <section class="container my-5">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3"><i class="bi bi-heart-pulse-fill text-danger me-2"></i><h5 class="card-title m-0">Personal Training</h5></div>
+                        <p class="card-text">Tailored programs and hands-on coaching to reach your goals faster.</p>
+                        <span class="badge text-bg-primary">Popular</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3"><i class="bi bi-people-fill text-success me-2"></i><h5 class="card-title m-0">Group Classes</h5></div>
+                        <p class="card-text">Fun, high-energy sessions that keep you motivated and consistent.</p>
+                        <span class="badge text-bg-success">New</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3"><i class="bi bi-egg-fried text-warning me-2"></i><h5 class="card-title m-0">Nutrition Plans</h5></div>
+                        <p class="card-text">Custom nutrition guidance to complement your training regimen.</p>
+                        <span class="badge text-bg-warning">Trending</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container my-5">
+        <div class="p-4 p-md-5 bg-light rounded-4 border">
+            <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3">
+                <div>
+                    <h3 class="fw-semibold mb-1">Ready to get started?</h3>
+                    <p class="text-muted mb-0">Join today and take the first step towards a healthier you.</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg"><i class="bi bi-person-plus me-2"></i>Register</a>
+                    <a href="{{ url_for('services') }}" class="btn btn-outline-secondary btn-lg">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

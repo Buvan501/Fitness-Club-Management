@@ -1,0 +1,343 @@
+{% extends 'base.html' %}
+
+{% block title %}Trainer Dashboard | FitClub Pro{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h2 mb-0">Trainer Dashboard</h1>
+                    <p class="text-muted">Welcome back, {{ current_user.full_name }}</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="{{ url_for('trainer_attendance') }}" class="btn btn-primary">
+                        <i class="bi bi-check2-square me-2"></i>Mark Attendance
+                    </a>
+                    <a href="{{ url_for('trainer_classes') }}" class="btn btn-outline-primary">
+                        <i class="bi bi-calendar-event me-2"></i>My Classes
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trainer Info Card -->
+    <div class="row mb-4">
+        <div class="col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body text-center">
+                    <div class="avatar-lg bg-success bg-gradient rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3">
+                        <span class="text-white fw-bold fs-1">{{ current_user.first_name[0] }}{{ current_user.last_name[0] }}</span>
+                    </div>
+                    <h5 class="card-title">{{ current_user.full_name }}</h5>
+                    <p class="text-muted mb-3">{{ current_user.email }}</p>
+                    
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <div class="border-end">
+                                <h6 class="text-success mb-1">{{ trainer.specialization }}</h6>
+                                <small class="text-muted">Specialization</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <h6 class="text-info mb-1">{{ trainer.experience_years }}+ years</h6>
+                            <small class="text-muted">Experience</small>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-3">
+                    
+                    <div class="d-grid">
+                        <span class="badge bg-success fs-6">Active Trainer</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="col-lg-8">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <div class="bg-primary bg-gradient rounded-3 p-3 mx-auto mb-3 w-auto">
+                                <i class="bi bi-calendar-event text-white fs-4"></i>
+                            </div>
+                            <h4 class="text-primary mb-1">{{ classes|length }}</h4>
+                            <p class="text-muted mb-0">Active Classes</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <div class="bg-warning bg-gradient rounded-3 p-3 mx-auto mb-3 w-auto">
+                                <i class="bi bi-people text-white fs-4"></i>
+                            </div>
+                            <h4 class="text-warning mb-1">{{ today_bookings|length }}</h4>
+                            <p class="text-muted mb-0">Today's Students</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <div class="bg-info bg-gradient rounded-3 p-3 mx-auto mb-3 w-auto">
+                                <i class="bi bi-clock text-white fs-4"></i>
+                            </div>
+                            <h4 class="text-info mb-1">{{ trainer.hourly_rate if trainer.hourly_rate else 'N/A' }}</h4>
+                            <p class="text-muted mb-0">Hourly Rate ($)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Today's Schedule -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-transparent border-0">
+                            <h6 class="card-title mb-0">
+                                <i class="bi bi-calendar-day me-2"></i>Today's Schedule
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            {% if today_bookings %}
+                                <div class="table-responsive">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Time</th>
+                                                <th>Class</th>
+                                                <th>Students</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for booking in today_bookings %}
+                                            <tr>
+                                                <td>
+                                                    <small class="text-muted">
+                                                        {{ booking.class_schedule.start_time.strftime('%I:%M %p') }} - 
+                                                        {{ booking.class_schedule.end_time.strftime('%I:%M %p') }}
+                                                    </small>
+                                                </td>
+                                                <td>
+                                                    <strong>{{ booking.class_schedule.class_.name }}</strong>
+                                                    <br><small class="text-muted">{{ booking.class_schedule.room }}</small>
+                                                </td>
+                                                <td>
+                                                    <span class="badge bg-primary">{{ today_bookings|selectattr('class_schedule.class_.id', 'equalto', booking.class_schedule.class_.id)|list|length }}</span>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-success" onclick="markAttendance({{ booking.class_schedule.id }})">
+                                                        <i class="bi bi-check2-square me-1"></i>Attendance
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <div class="text-center text-muted py-3">
+                                    <i class="bi bi-calendar-x fs-1 d-block mb-2"></i>
+                                    <p class="mb-0">No classes scheduled for today</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- My Classes and Recent Activity -->
+    <div class="row">
+        <!-- My Classes -->
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-calendar-event me-2"></i>My Classes
+                    </h5>
+                    <a href="{{ url_for('trainer_classes') }}" class="btn btn-sm btn-outline-primary">View All</a>
+                </div>
+                <div class="card-body p-0">
+                    {% if classes %}
+                        <div class="list-group list-group-flush">
+                            {% for class_ in classes %}
+                            <div class="list-group-item border-0">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1">{{ class_.name }}</h6>
+                                        <p class="mb-1 text-muted">
+                                            <i class="bi bi-tag me-1"></i>{{ class_.category }} • 
+                                            <i class="bi bi-people me-1"></i>{{ class_.max_capacity }} max
+                                        </p>
+                                        <small class="text-muted">
+                                            <i class="bi bi-clock me-1"></i>{{ class_.duration_minutes }} min • 
+                                            <i class="bi bi-currency-dollar me-1"></i>{{ class_.price }}
+                                        </small>
+                                    </div>
+                                    <span class="badge bg-success">Active</span>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center text-muted py-4">
+                            <i class="bi bi-calendar-x fs-1 d-block mb-2"></i>
+                            <p class="mb-2">No classes assigned yet</p>
+                            <small>Contact admin to get assigned to classes</small>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-transparent border-0">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-activity me-2"></i>Recent Activity
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item border-0">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-success rounded-circle p-2 me-3">
+                                    <i class="bi bi-check2-square text-white"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">Attendance Marked</h6>
+                                    <small class="text-muted">Yoga Class - 10 students present</small>
+                                </div>
+                                <small class="text-muted">2 hours ago</small>
+                            </div>
+                        </div>
+                        
+                        <div class="list-group-item border-0">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-info rounded-circle p-2 me-3">
+                                    <i class="bi bi-calendar-plus text-white"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">New Class Added</h6>
+                                    <small class="text-muted">Advanced Strength Training</small>
+                                </div>
+                                <small class="text-muted">1 day ago</small>
+                            </div>
+                        </div>
+                        
+                        <div class="list-group-item border-0">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-warning rounded-circle p-2 me-3">
+                                    <i class="bi bi-people text-white"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">High Attendance</h6>
+                                    <small class="text-muted">Cardio Class - 18/20 students</small>
+                                </div>
+                                <small class="text-muted">3 days ago</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent border-0">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-lightning me-2"></i>Quick Actions
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <a href="{{ url_for('trainer_attendance') }}" class="btn btn-outline-success w-100">
+                                <i class="bi bi-check2-square fs-4 d-block mb-2"></i>
+                                Mark Attendance
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="{{ url_for('trainer_classes') }}" class="btn btn-outline-primary w-100">
+                                <i class="bi bi-calendar-event fs-4 d-block mb-2"></i>
+                                View Classes
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <button class="btn btn-outline-info w-100" onclick="viewSchedule()">
+                                <i class="bi bi-calendar-week fs-4 d-block mb-2"></i>
+                                Weekly Schedule
+                            </button>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <button class="btn btn-outline-warning w-100" onclick="viewReports()">
+                                <i class="bi bi-graph-up fs-4 d-block mb-2"></i>
+                                View Reports
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Attendance Modal -->
+<div class="modal fade" id="attendanceModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Mark Attendance</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="attendanceContent">
+                    <!-- Attendance content will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function markAttendance(classScheduleId) {
+    // Redirect to attendance page for this specific class
+    window.location.href = `/trainer/attendance?class=${classScheduleId}`;
+}
+
+function viewSchedule() {
+    // Show weekly schedule
+    alert('Weekly schedule feature coming soon!');
+}
+
+function viewReports() {
+    // Show attendance reports
+    alert('Reports feature coming soon!');
+}
+
+// Auto-refresh dashboard every 5 minutes
+setInterval(function() {
+    // Refresh only if user is on dashboard
+    if (window.location.pathname === '/trainer') {
+        location.reload();
+    }
+}, 300000); // 5 minutes
+</script>
+{% endblock %}

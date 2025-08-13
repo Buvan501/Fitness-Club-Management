@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin - Services | Gym Management System{% endblock %}
+
+{% block page_id %}admin-services{% endblock %}
+
+{% block content %}
+    <section class="container py-5">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h2 class="fw-bold m-0">Services</h2>
+            <div class="d-flex gap-2">
+                <a href="{{ url_for('add_service') }}" class="btn btn-primary btn-sm">
+                    <i class="bi bi-plus-lg me-1"></i>Add Service
+                </a>
+                <span class="badge rounded-pill text-bg-secondary">Read-only demo</span>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for service in services %}
+                    <tr>
+                        <th scope="row">{{ service.id }}</th>
+                        <td class="fw-semibold">{{ service.name }}</td>
+                        <td>{{ service.description }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+{% endblock %}

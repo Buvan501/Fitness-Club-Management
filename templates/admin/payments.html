@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Payments | Admin{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h2 class="mb-4">Payments</h2>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Member</th>
+          <th>Amount</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in payments %}
+        <tr>
+          <td>{{ p.user.full_name }}</td>
+          <td>${{ '%.2f'|format(p.amount) }}</td>
+          <td>{{ p.payment_type }}</td>
+          <td>{{ p.status }}</td>
+          <td>{{ p.transaction_date.strftime('%Y-%m-%d') }}</td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="5" class="text-center text-muted">No payments</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

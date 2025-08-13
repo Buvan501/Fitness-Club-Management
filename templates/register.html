@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %}Register | Gym Management System{% endblock %}
+
+{% block page_id %}register{% endblock %}
+
+{% block content %}
+    <section class="service-form-container">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card service-form-card">
+                        <div class="card-body p-5">
+                            <div class="text-center mb-4">
+                                <i class="bi bi-person-plus text-primary fs-1"></i>
+                                <h2 class="h3 mt-3">Create Account</h2>
+                                <p class="text-muted">Join our fitness community today</p>
+                            </div>
+                            <form id="register-form" method="POST" action="{{ url_for('register') }}" novalidate>
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <label class="form-label d-block">Account Type</label>
+                                        <div class="d-flex gap-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="account_type" id="roleMember" value="member" checked>
+                                                <label class="form-check-label" for="roleMember">
+                                                    <i class="bi bi-person me-1"></i> Member
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="account_type" id="roleTrainer" value="trainer">
+                                                <label class="form-check-label" for="roleTrainer">
+                                                    <i class="bi bi-person-badge me-1"></i> Trainer
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="first_name" class="form-label">First Name</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                            <input type="text" class="form-control" id="first_name" name="first_name" required aria-required="true" placeholder="Enter your first name" autocomplete="given-name">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="last_name" class="form-label">Last Name</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                            <input type="text" class="form-control" id="last_name" name="last_name" required aria-required="true" placeholder="Enter your last name" autocomplete="family-name">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="phone" class="form-label">Phone Number</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                                            <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter your phone number" autocomplete="tel">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="email" class="form-label">Email Address</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                            <input type="email" class="form-control" id="email" name="email" required aria-required="true" placeholder="Enter your email" autocomplete="email">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="username" class="form-label">Username</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="bi bi-at"></i></span>
+                                            <input type="text" class="form-control" id="username" name="username" required aria-required="true" placeholder="Choose a username" autocomplete="username">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="password" class="form-label">Password</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                            <input type="password" class="form-control" id="password" name="password" required aria-required="true" placeholder="Create a password" autocomplete="new-password">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="confirm_password" class="form-label">Confirm Password</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required aria-required="true" placeholder="Re-enter your password" autocomplete="new-password">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-end mt-4">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="bi bi-person-plus me-2"></i>Create Account
+                                    </button>
+                                </div>
+                                <div class="text-center mt-4">
+                                    <p class="mb-0">Already have an account? <a href="{{ url_for('login') }}" class="text-decoration-none">Sign in here</a></p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

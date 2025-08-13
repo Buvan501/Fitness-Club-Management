@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}About Us | Gym Management System{% endblock %}
+
+{% block page_id %}about{% endblock %}
+
+{% block content %}
+    <section class="container py-5">
+        <div class="row align-items-center g-5">
+            <div class="col-md-6">
+                <img src="{{ url_for('static', filename='gym2.jpg') }}" class="img-fluid rounded-4 shadow-sm" alt="Gym interior" />
+            </div>
+            <div class="col-md-6">
+                <h2 class="fw-bold mb-3">About Us</h2>
+                <p class="lead text-muted">We are dedicated to helping you achieve your fitness goals with our state-of-the-art facilities and professional trainers.</p>
+                <div class="d-flex align-items-center gap-3 mt-4">
+                    <div class="text-center">
+                        <div class="fs-2 fw-bold">50+</div>
+                        <div class="text-muted">Trainers</div>
+                    </div>
+                    <div class="vr"></div>
+                    <div class="text-center">
+                        <div class="fs-2 fw-bold">1000+</div>
+                        <div class="text-muted">Members</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

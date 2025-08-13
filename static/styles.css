@@ -1,0 +1,101 @@
+/* Modern Gym Management System Styles */
+:root {
+    --brand-primary: #0d6efd;
+    --brand-secondary: #6c757d;
+    --brand-success: #198754;
+    --brand-warning: #ffc107;
+    --brand-danger: #dc3545;
+    --text-primary: #1f2937;
+    --text-secondary: #6b7280;
+    --bg-soft: #f8fafc;
+    --card-bg: #ffffff;
+    --border-color: rgba(0, 0, 0, 0.08);
+    --radius-lg: 1rem;
+    --radius-md: .75rem;
+    --radius-sm: .5rem;
+    --shadow-sm: 0 4px 12px rgba(0,0,0,.06);
+    --shadow-md: 0 10px 30px rgba(0,0,0,.12);
+}
+
+html { scroll-behavior: smooth; }
+body { color: var(--text-primary); padding-top: 4.5rem; font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+main { display: flex; flex-direction: column; }
+
+/* Navbar */
+.navbar-glass {
+    background: rgba(33, 37, 41, 0.85) !important;
+    backdrop-filter: saturate(180%) blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.navbar .btn { border-radius: var(--radius-sm); }
+
+/* Helpers */
+.section { padding: 3rem 0; }
+.section-light { background: var(--bg-soft); }
+.card-elevated { border: 1px solid var(--border-color); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); }
+.rounded-blob { border-radius: var(--radius-lg); }
+
+/* Page Header */
+.page-header {
+    padding: 3.5rem 0 2rem;
+    background: linear-gradient(180deg, rgba(13,110,253,0.08), rgba(13,110,253,0.02));
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 1.5rem;
+}
+.page-header .title { font-weight: 700; }
+.page-header .subtitle { color: var(--text-secondary); }
+
+/* Carousel */
+#heroCarousel .carousel-item img { object-fit: cover; max-height: 520px; }
+
+/* Charts */
+.chart-container { position: relative; height: 300px; }
+
+/* Auth and Service Forms */
+#login, #register {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)),
+                linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: calc(100vh - 200px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+}
+
+#login .card, #register .card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: none; box-shadow: var(--shadow-md); }
+
+.service-form-container {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6)),
+                linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+    background-size: cover; background-position: center; background-attachment: fixed;
+    min-height: calc(100vh - 200px); padding: 3rem 0;
+}
+.service-form-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: none; box-shadow: var(--shadow-md); }
+
+/* Tables */
+.table { border-radius: var(--radius-md); overflow: hidden; }
+.table thead th { background: #f2f4f7; color: #475569; font-weight: 600; }
+.table tbody tr:hover { background: #f9fafb; }
+
+/* Badges */
+.badge { border-radius: 999px; }
+
+/* Buttons */
+.btn { border-radius: var(--radius-sm); }
+.btn i { pointer-events: none; }
+.btn-soft-primary { background: rgba(13, 110, 253, .08); color: var(--brand-primary); border: 1px solid rgba(13, 110, 253, .18); }
+.btn-soft-primary:hover { background: rgba(13, 110, 253, .12); }
+
+/* Cards */
+.card { border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); }
+.card .card-title { font-weight: 600; }
+
+/* Forms */
+.form-control, .form-select { border-radius: var(--radius-sm); border-color: var(--border-color); }
+.input-group-text { background: #f8fafc; border-color: var(--border-color); }
+
+/* Footer */
+footer { border-top: 1px solid var(--border-color); }

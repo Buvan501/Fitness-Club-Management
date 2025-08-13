@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact Us | Gym Management System{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+{% endblock %}
+
+{% block page_id %}contact{% endblock %}
+
+{% block content %}
+    <section class="container py-5">
+        <div class="row g-4">
+            <div class="col-lg-5">
+                <h2 class="fw-bold mb-3">Get in Touch</h2>
+                <p class="text-muted">We're here to help and answer any question you might have. We look forward to hearing from you.</p>
+                <ul class="list-unstyled mt-4">
+                    <li class="d-flex align-items-start mb-3">
+                        <i class="bi bi-geo-alt-fill text-primary me-3 fs-4" aria-hidden="true"></i>
+                        <div>
+                            <div class="fw-semibold">Address</div>
+                            <div class="text-muted">123 Fitness Street, Gym City, GC 12345</div>
+                        </div>
+                    </li>
+                    <li class="d-flex align-items-start mb-3">
+                        <i class="bi bi-telephone-fill text-primary me-3 fs-5" aria-hidden="true"></i>
+                        <div>
+                            <div class="fw-semibold">Phone</div>
+                            <div class="text-muted">+1 (555) 123-4567</div>
+                        </div>
+                    </li>
+                    <li class="d-flex align-items-start mb-3">
+                        <i class="bi bi-envelope-fill text-primary me-3 fs-5" aria-hidden="true"></i>
+                        <div>
+                            <div class="fw-semibold">Email</div>
+                            <div class="text-muted">info@gymmanagement.com</div>
+                        </div>
+                    </li>
+                    <li class="d-flex align-items-start">
+                        <i class="bi bi-clock-fill text-primary me-3 fs-5" aria-hidden="true"></i>
+                        <div>
+                            <div class="fw-semibold">Working Hours</div>
+                            <div class="text-muted">Mon - Fri: 6am - 10pm • Sat & Sun: 8am - 8pm</div>
+                        </div>
+                    </li>
+                </ul>
+                <div class="d-flex gap-3 mt-3" aria-label="Social links">
+                    <a href="#" class="text-decoration-none"><i class="bi bi-facebook fs-4" aria-hidden="true"></i><span class="visually-hidden">Facebook</span></a>
+                    <a href="#" class="text-decoration-none"><i class="bi bi-twitter-x fs-4" aria-hidden="true"></i><span class="visually-hidden">Twitter</span></a>
+                    <a href="#" class="text-decoration-none"><i class="bi bi-instagram fs-4" aria-hidden="true"></i><span class="visually-hidden">Instagram</span></a>
+                    <a href="#" class="text-decoration-none"><i class="bi bi-linkedin fs-4" aria-hidden="true"></i><span class="visually-hidden">LinkedIn</span></a>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+                        <h3 class="h4 mb-3">Send Us a Message</h3>
+                        <form id="contact-form" novalidate>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="name" class="form-label">Your Name</label>
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="John Doe" required aria-required="true">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="john@example.com" required aria-required="true">
+                                </div>
+                                <div class="col-12">
+                                    <label for="subject" class="form-label">Subject</label>
+                                    <input type="text" class="form-control" id="subject" name="subject" placeholder="How can we help you?" required aria-required="true">
+                                </div>
+                                <div class="col-12">
+                                    <label for="message" class="form-label">Your Message</label>
+                                    <textarea class="form-control" id="message" name="message" rows="5" placeholder="Write your message here..." required aria-required="true"></textarea>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end mt-3">
+                                <button type="submit" class="btn btn-primary"><i class="bi bi-send me-2"></i>Send Message</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

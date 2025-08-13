@@ -1,0 +1,380 @@
+{% extends 'base.html' %}
+
+{% block title %}Member Dashboard | FitClub Pro{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h2 mb-0">Welcome back, {{ current_user.first_name }}!</h1>
+                    <p class="text-muted">Track your fitness journey and manage your classes</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProgressModal">
+                        <i class="bi bi-plus-circle me-2"></i>Log Progress
+                    </button>
+                    <a href="{{ url_for('member_classes') }}" class="btn btn-outline-primary">
+                        <i class="bi bi-calendar-plus me-2"></i>Book Classes
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Member Info Card -->
+    <div class="row mb-4">
+        <div class="col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body text-center">
+                    <div class="avatar-lg bg-primary bg-gradient rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3">
+                        <span class="text-white fw-bold fs-1">{{ current_user.first_name[0] }}{{ current_user.last_name[0] }}</span>
+                    </div>
+                    <h5 class="card-title">{{ current_user.full_name }}</h5>
+                    <p class="text-muted mb-3">{{ current_user.email }}</p>
+                    
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <div class="border-end">
+                                <h6 class="text-primary mb-1">{{ member.membership_type }}</h6>
+                                <small class="text-muted">Plan</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <h6 class="text-success mb-1">{{ member.membership_number }}</h6>
+                            <small class="text-muted">Member ID</small>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-3">
+                    
+                    <div class="d-grid">
+                        <a href="{{ url_for('member_profile') }}" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-pencil me-2"></i>Edit Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="col-lg-8">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <div class="bg-success bg-gradient rounded-3 p-3 mx-auto mb-3 w-auto">
+                                <i class="bi bi-calendar-check text-white fs-4"></i>
+                            </div>
+                            <h4 class="text-success mb-1">{{ upcoming_bookings|length }}</h4>
+                            <p class="text-muted mb-0">Upcoming Classes</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <div class="bg-info bg-gradient rounded-3 p-3 mx-auto mb-3 w-auto">
+                                <i class="bi bi-graph-up text-white fs-4"></i>
+                            </div>
+                            <h4 class="text-info mb-1">{{ recent_progress|length }}</h4>
+                            <p class="text-muted mb-0">Progress Entries</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <div class="bg-warning bg-gradient rounded-3 p-3 mx-auto mb-3 w-auto">
+                                <i class="bi bi-calendar-x text-white fs-4"></i>
+                            </div>
+                            <h4 class="text-warning mb-1">{{ (member.expiry_date - today).days if member.expiry_date else 0 }}</h4>
+                            <p class="text-muted mb-0">Days Until Expiry</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BMI and Weight Progress -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-transparent border-0">
+                            <h6 class="card-title mb-0">
+                                <i class="bi bi-speedometer2 me-2"></i>Fitness Metrics
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row text-center">
+                                <div class="col-md-4">
+                                    <h5 class="text-primary mb-1">{{ "%.1f"|format(member.current_weight) if member.current_weight else 'N/A' }} kg</h5>
+                                    <small class="text-muted">Current Weight</small>
+                                </div>
+                                <div class="col-md-4">
+                                    <h5 class="text-success mb-1">{{ "%.1f"|format(member.target_weight) if member.target_weight else 'N/A' }} kg</h5>
+                                    <small class="text-muted">Target Weight</small>
+                                </div>
+                                <div class="col-md-4">
+                                    <h5 class="text-info mb-1">{{ "%.1f"|format(member.bmi) if member.bmi else 'N/A' }}</h5>
+                                    <small class="text-muted">BMI</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upcoming Bookings and Recent Progress -->
+    <div class="row">
+        <!-- Upcoming Bookings -->
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-calendar-check me-2"></i>Upcoming Classes
+                    </h5>
+                    <a href="{{ url_for('member_bookings') }}" class="btn btn-sm btn-outline-primary">View All</a>
+                </div>
+                <div class="card-body p-0">
+                    {% if upcoming_bookings %}
+                        <div class="list-group list-group-flush">
+                            {% for booking in upcoming_bookings %}
+                            <div class="list-group-item border-0">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1">{{ booking.class_schedule.class_.name }}</h6>
+                                        <p class="mb-1 text-muted">
+                                            <i class="bi bi-person-badge me-1"></i>{{ booking.class_schedule.class_.trainer.user.full_name }}
+                                        </p>
+                                        <small class="text-muted">
+                                            <i class="bi bi-calendar me-1"></i>{{ booking.booking_date.strftime('%b %d, %Y') }} • 
+                                            <i class="bi bi-clock me-1"></i>{{ booking.class_schedule.start_time.strftime('%I:%M %p') }}
+                                        </small>
+                                    </div>
+                                    <span class="badge bg-success">Confirmed</span>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center text-muted py-4">
+                            <i class="bi bi-calendar-x fs-1 d-block mb-2"></i>
+                            <p class="mb-2">No upcoming classes</p>
+                            <a href="{{ url_for('member_classes') }}" class="btn btn-primary btn-sm">Book Your First Class</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Progress -->
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-graph-up me-2"></i>Recent Progress
+                    </h5>
+                    <a href="{{ url_for('member_progress') }}" class="btn btn-sm btn-outline-primary">View All</a>
+                </div>
+                <div class="card-body p-0">
+                    {% if recent_progress %}
+                        <div class="list-group list-group-flush">
+                            {% for progress in recent_progress %}
+                            <div class="list-group-item border-0">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1">{{ progress.log_date.strftime('%b %d, %Y') }}</h6>
+                                        <p class="mb-1 text-muted">
+                                            {% if progress.weight %}
+                                                <span class="badge bg-light text-dark me-1">Weight: {{ "%.1f"|format(progress.weight) }}kg</span>
+                                            {% endif %}
+                                            {% if progress.bmi %}
+                                                <span class="badge bg-light text-dark me-1">BMI: {{ "%.1f"|format(progress.bmi) }}</span>
+                                            {% endif %}
+                                        </p>
+                                        {% if progress.notes %}
+                                            <small class="text-muted">{{ progress.notes[:50] }}{% if progress.notes|length > 50 %}...{% endif %}</small>
+                                        {% endif %}
+                                    </div>
+                                    <small class="text-muted">{{ progress.created_at.strftime('%I:%M %p') }}</small>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center text-muted py-4">
+                            <i class="bi bi-graph-up fs-1 d-block mb-2"></i>
+                            <p class="mb-2">No progress entries yet</p>
+                            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addProgressModal">Log Your First Entry</button>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent border-0">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-lightning me-2"></i>Quick Actions
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <a href="{{ url_for('member_classes') }}" class="btn btn-outline-primary w-100">
+                                <i class="bi bi-calendar-plus fs-4 d-block mb-2"></i>
+                                Book Classes
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <button class="btn btn-outline-success w-100" data-bs-toggle="modal" data-bs-target="#addProgressModal">
+                                <i class="bi bi-plus-circle fs-4 d-block mb-2"></i>
+                                Log Progress
+                            </button>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="{{ url_for('member_profile') }}" class="btn btn-outline-info w-100">
+                                <i class="bi bi-person-circle fs-4 d-block mb-2"></i>
+                                Update Profile
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="{{ url_for('member_bookings') }}" class="btn btn-outline-warning w-100">
+                                <i class="bi bi-calendar-check fs-4 d-block mb-2"></i>
+                                View Bookings
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Progress Modal -->
+<div class="modal fade" id="addProgressModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Log Progress</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="progressForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="weight" class="form-label">Weight (kg)</label>
+                            <input type="number" step="0.1" class="form-control" id="weight" placeholder="e.g., 70.5">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="bodyFat" class="form-label">Body Fat %</label>
+                            <input type="number" step="0.1" class="form-control" id="bodyFat" placeholder="e.g., 15.2">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="muscleMass" class="form-label">Muscle Mass (kg)</label>
+                            <input type="number" step="0.1" class="form-control" id="muscleMass" placeholder="e.g., 45.0">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="chest" class="form-label">Chest (cm)</label>
+                            <input type="number" step="0.1" class="form-control" id="chest" placeholder="e.g., 95.0">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="waist" class="form-label">Waist (cm)</label>
+                            <input type="number" step="0.1" class="form-control" id="waist" placeholder="e.g., 80.0">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="hip" class="form-label">Hip (cm)</label>
+                            <input type="number" step="0.1" class="form-control" id="hip" placeholder="e.g., 95.0">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="bicep" class="form-label">Bicep (cm)</label>
+                            <input type="number" step="0.1" class="form-control" id="bicep" placeholder="e.g., 32.0">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="thigh" class="form-label">Thigh (cm)</label>
+                            <input type="number" step="0.1" class="form-control" id="thigh" placeholder="e.g., 55.0">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="notes" class="form-label">Notes</label>
+                        <textarea class="form-control" id="notes" rows="3" placeholder="Any additional notes about your progress..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Progress</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Progress Form Handler
+document.getElementById('progressForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = {
+        weight: document.getElementById('weight').value || null,
+        body_fat_percentage: document.getElementById('bodyFat').value || null,
+        muscle_mass: document.getElementById('muscleMass').value || null,
+        chest_circumference: document.getElementById('chest').value || null,
+        waist_circumference: document.getElementById('waist').value || null,
+        hip_circumference: document.getElementById('hip').value || null,
+        bicep_circumference: document.getElementById('bicep').value || null,
+        thigh_circumference: document.getElementById('thigh').value || null,
+        notes: document.getElementById('notes').value || null
+    };
+    
+    // Send to backend
+    fetch('/api/add-progress', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Progress logged successfully!');
+            location.reload(); // Refresh to show new data
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while saving progress.');
+    });
+    
+    // Close modal
+    bootstrap.Modal.getInstance(document.getElementById('addProgressModal')).hide();
+    
+    // Reset form
+    this.reset();
+});
+</script>
+{% endblock %}

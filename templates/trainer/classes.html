@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}My Classes | Trainer{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h2 class="mb-4">My Classes</h2>
+  <div class="table-responsive">
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Capacity</th>
+          <th>Duration</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in classes %}
+        <tr>
+          <td>{{ c.name }}</td>
+          <td>{{ c.category }}</td>
+          <td>{{ c.max_capacity }}</td>
+          <td>{{ c.duration_minutes }} min</td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="4" class="text-center text-muted">No classes assigned</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
