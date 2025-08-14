@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: web
-          image: docker.io/${DOCKERHUB_USERNAME}/fitclub-pro:latest
+          image: docker.io/buvan501/fitclub-pro:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
