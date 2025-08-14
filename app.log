@@ -1,0 +1,34 @@
+ * Serving Flask app 'app'
+ * Debug mode: on
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 766-913-507
+Traceback (most recent call last):
+  File "/Users/buvan/Documents/Fitness-Club-Management/app.py", line 509, in <module>
+    app.run(debug=True)
+  File "/Users/buvan/Documents/Fitness-Club-Management/.venv/lib/python3.12/site-packages/flask/app.py", line 662, in run
+Fatal Python error: init_sys_streams: can't initialize sys standard streams
+Python runtime state: core initialized
+OSError: [Errno 9] Bad file descriptor
+
+Current thread 0x0000000113cc2600 (most recent call first):
+  <no Python frame>
+    run_simple(t.cast(str, host), port, self, **options)
+  File "/Users/buvan/Documents/Fitness-Club-Management/.venv/lib/python3.12/site-packages/werkzeug/serving.py", line 1115, in run_simple
+    run_with_reloader(
+  File "/Users/buvan/Documents/Fitness-Club-Management/.venv/lib/python3.12/site-packages/werkzeug/_reloader.py", line 459, in run_with_reloader
+    ensure_echo_on()
+  File "/Users/buvan/Documents/Fitness-Club-Management/.venv/lib/python3.12/site-packages/werkzeug/_reloader.py", line 439, in ensure_echo_on
+    termios.tcsetattr(sys.stdin, termios.TCSANOW, attributes)
+termios.error: (4, 'Interrupted system call')
+/opt/anaconda3/lib/python3.12/multiprocessing/resource_tracker.py:123: UserWarning: resource_tracker: process died unexpectedly, relaunching.  Some resources might leak.
+  warnings.warn('resource_tracker: process died unexpectedly, '
+Fatal Python error: init_sys_streams: can't initialize sys standard streams
+Python runtime state: core initialized
+OSError: [Errno 9] Bad file descriptor
+
+Current thread 0x000000011b8c0600 (most recent call first):
+  <no Python frame>

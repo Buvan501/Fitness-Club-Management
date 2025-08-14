@@ -55,13 +55,13 @@ main { display: flex; flex-direction: column; }
 #login, #register {
     background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)),
                 linear-gradient(45deg, #667eea 0%, #764ba2 100%);
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
     min-height: calc(100vh - 200px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
     padding: 2rem 0;
 }
 

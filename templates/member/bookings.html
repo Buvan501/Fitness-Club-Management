@@ -11,6 +11,7 @@
           <th>Class</th>
           <th>Time</th>
           <th>Status</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -20,10 +21,21 @@
           <td>{{ b.class_schedule.class_.name }}</td>
           <td>{{ b.class_schedule.start_time.strftime('%H:%M') }} - {{ b.class_schedule.end_time.strftime('%H:%M') }}</td>
           <td><span class="badge bg-{{ 'success' if b.status=='confirmed' else 'secondary' }}">{{ b.status|title }}</span></td>
+          <td>
+            {% if b.status == 'confirmed' %}
+            <form action="{{ url_for('cancel_booking', booking_id=b.id) }}" method="POST" onsubmit="return confirm('Cancel this booking?');">
+              <button type="submit" class="btn btn-sm btn-outline-danger">
+                <i class="bi bi-x-circle me-1"></i>Cancel
+              </button>
+            </form>
+            {% else %}
+            <span class="text-muted">—</span>
+            {% endif %}
+          </td>
         </tr>
         {% else %}
         <tr>
-          <td colspan="4" class="text-center text-muted">No bookings yet</td>
+          <td colspan="5" class="text-center text-muted">No bookings yet</td>
         </tr>
         {% endfor %}
       </tbody>

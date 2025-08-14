@@ -145,6 +145,36 @@ def register():
         user.roles.append(role)
         
         db.session.add(user)
+        db.session.flush()  # ensure user.id is available
+        
+        # Create default profile for role
+        try:
+            if role_name == 'member':
+                # Generate membership number and default values
+                membership_number = f"M{user.id:05d}"
+                expiry = date.today() + timedelta(days=30)
+                member_profile = Member(
+                    user_id=user.id,
+                    membership_number=membership_number,
+                    membership_type='Basic',
+                    expiry_date=expiry,
+                    is_active=True
+                )
+                db.session.add(member_profile)
+            elif role_name == 'trainer':
+                trainer_identifier = f"T{user.id:05d}"
+                trainer_profile = Trainer(
+                    user_id=user.id,
+                    trainer_id=trainer_identifier,
+                    specialization='General Fitness',
+                    experience_years=0,
+                    is_active=True
+                )
+                db.session.add(trainer_profile)
+        except Exception:
+            db.session.rollback()
+            flash('Failed to create user profile. Please try again.', 'error')
+            return render_template('register.html')
         try:
             db.session.commit()
         except IntegrityError:
@@ -314,6 +344,12 @@ def member_bookings():
     ).order_by(Booking.booking_date.desc()).all()
     return render_template('member/bookings.html', bookings=bookings)
 
+@app.route('/member/payments')
+@require_role('member')
+def member_payments():
+    payments = Payment.query.filter_by(user_id=current_user.id).order_by(Payment.transaction_date.desc()).all()
+    return render_template('member/payments.html', payments=payments)
+
 @app.route('/member/progress')
 @require_role('member')
 def member_progress():
@@ -466,6 +502,74 @@ def add_progress():
     db.session.commit()
     
     return jsonify({'success': True, 'message': 'Progress logged successfully'})
+
+@app.route('/api/schedule-bookings/<int:class_schedule_id>')
+@login_required
+def get_schedule_bookings(class_schedule_id: int):
+    # Trainers can view bookings for their schedules only
+    if not current_user.has_role('trainer'):
+        return jsonify({'success': False, 'message': 'Only trainers can view bookings'}), 403
+    
+    # Validate schedule belongs to the trainer
+    schedule = ClassSchedule.query.get(class_schedule_id)
+    if not schedule or not schedule.is_active:
+        return jsonify({'success': False, 'message': 'Schedule not found'}), 404
+    
+    trainer = Trainer.query.filter_by(user_id=current_user.id).first()
+    if not trainer or schedule.class_.trainer_id != trainer.id:
+        return jsonify({'success': False, 'message': 'Not authorized for this schedule'}), 403
+    
+    # Parse date parameter
+    date_str = request.args.get('date')
+    try:
+        target_date = datetime.strptime(date_str, '%Y-%m-%d').date() if date_str else date.today()
+    except ValueError:
+        return jsonify({'success': False, 'message': 'Invalid date format'}), 400
+    
+    bookings = Booking.query.join(User).filter(
+        Booking.class_schedule_id == class_schedule_id,
+        Booking.booking_date == target_date,
+        Booking.status == 'confirmed'
+    ).all()
+    
+    # Map attendance status
+    attendance_map = {}
+    attendance_records = Attendance.query.filter_by(class_schedule_id=class_schedule_id, attendance_date=target_date).all()
+    for rec in attendance_records:
+        attendance_map[rec.user_id] = rec.status
+    
+    data = []
+    for b in bookings:
+        data.append({
+            'user_id': b.user_id,
+            'name': b.user.full_name,
+            'email': b.user.email,
+            'status': attendance_map.get(b.user_id) or 'not_marked'
+        })
+    
+    return jsonify({'success': True, 'data': data, 'date': target_date.strftime('%Y-%m-%d')})
+
+@app.route('/member/bookings/<int:booking_id>/cancel', methods=['POST'])
+@require_role('member')
+def cancel_booking(booking_id: int):
+    booking = Booking.query.filter_by(id=booking_id, user_id=current_user.id).first()
+    if not booking:
+        flash('Booking not found.', 'error')
+        return redirect(url_for('member_bookings'))
+    if booking.status != 'confirmed':
+        flash('Only confirmed bookings can be cancelled.', 'error')
+        return redirect(url_for('member_bookings'))
+    booking.status = 'cancelled'
+    db.session.commit()
+    flash('Booking cancelled.', 'success')
+    return redirect(url_for('member_bookings'))
+
+# Trainer notifications
+@app.route('/trainer/notifications')
+@require_role('trainer')
+def trainer_notifications():
+    notifications = Notification.query.filter_by(user_id=current_user.id).order_by(Notification.created_at.desc()).all()
+    return render_template('trainer/notifications.html', notifications=notifications)
 
 # Error handlers
 @app.errorhandler(404)

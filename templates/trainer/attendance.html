@@ -44,9 +44,76 @@
 <script>
 function goToAttendance(btn) {
   const id = btn.getAttribute('data-schedule-id');
-  // Placeholder: navigate or open a modal to mark attendance for this schedule
-  // You can extend this to list booked members and call /api/mark-attendance
-  alert('Open attendance marking for schedule #' + id);
+  const targetDate = new Date().toISOString().split('T')[0];
+  fetch(`/api/schedule-bookings/${id}?date=${targetDate}`)
+    .then(r => r.json())
+    .then(json => {
+      if (!json.success) {
+        alert(json.message || 'Failed to load bookings');
+        return;
+      }
+      const rows = json.data.map(s => `
+        <tr>
+          <td>${s.name}<br><small class="text-muted">${s.email}</small></td>
+          <td>
+            <div class="btn-group btn-group-sm" role="group" aria-label="Attendance">
+              <button class="btn btn-outline-success" onclick="mark('${id}', '${s.user_id}', 'present')">Present</button>
+              <button class="btn btn-outline-warning" onclick="mark('${id}', '${s.user_id}', 'late')">Late</button>
+              <button class="btn btn-outline-secondary" onclick="mark('${id}', '${s.user_id}', 'absent')">Absent</button>
+            </div>
+          </td>
+          <td><span class="badge bg-${s.status==='present'?'success':(s.status==='late'?'warning':'secondary')}">${s.status.replace('_',' ')}</span></td>
+        </tr>
+      `).join('');
+      document.getElementById('attendanceBody').innerHTML = rows || '<tr><td colspan="3" class="text-center text-muted">No bookings</td></tr>';
+      new bootstrap.Modal(document.getElementById('attendanceModal')).show();
+    })
+    .catch(() => alert('Error loading bookings'));
+}
+
+function mark(scheduleId, userId, status) {
+  fetch('/api/mark-attendance', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ class_schedule_id: Number(scheduleId), user_id: Number(userId), status })
+  })
+  .then(r => r.json())
+  .then(json => {
+    if (!json.success) { alert(json.message || 'Failed to mark attendance'); return; }
+    // Refresh modal table
+    goToAttendance({ getAttribute: () => scheduleId });
+  })
+  .catch(() => alert('Error marking attendance'));
 }
 </script>
+{% endblock %}
+
+{% block content %}{% endblock %}
+
+{% block content %}
+<!-- Attendance Modal -->
+<div class="modal fade" id="attendanceModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Mark Attendance</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th>Member</th>
+                <th>Action</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="attendanceBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
 {% endblock %}
