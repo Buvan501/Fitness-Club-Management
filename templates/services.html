@@ -237,14 +237,24 @@ function viewSchedule(classId) {
 
 // Book class
 function bookClass(classId) {
-    // This would typically fetch available schedules from the backend
     const scheduleSelect = document.getElementById('classSchedule');
-    scheduleSelect.innerHTML = `
-        <option value="">Choose a time slot...</option>
-        <option value="1">Monday 9:00 AM - 10:00 AM (Studio A)</option>
-        <option value="2">Wednesday 6:00 PM - 7:00 PM (Studio B)</option>
-        <option value="3">Friday 7:00 AM - 8:00 AM (Studio A)</option>
-    `;
+    scheduleSelect.innerHTML = '<option value="">Loading schedules...</option>';
+    
+    // Fetch schedules for selected class
+    fetch(`/api/class-schedules/${classId}`)
+      .then(r => r.json())
+      .then(json => {
+        if (!json.success) {
+          scheduleSelect.innerHTML = '<option value="">No schedules available</option>';
+          return;
+        }
+        const options = ['<option value="">Choose a time slot...</option>']
+          .concat(json.data.map(s => `<option value="${s.id}">${s.day_name} ${s.start_time} - ${s.end_time} (${s.room})</option>`));
+        scheduleSelect.innerHTML = options.join('');
+      })
+      .catch(() => {
+        scheduleSelect.innerHTML = '<option value="">Error loading schedules</option>';
+      });
     
     // Set minimum date to today
     const today = new Date().toISOString().split('T')[0];

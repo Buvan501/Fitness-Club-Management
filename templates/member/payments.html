@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Payments | Member{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h2 class="mb-4">Payment History</h2>
+  <div class="table-responsive">
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Amount</th>
+          <th>Type</th>
+          <th>Method</th>
+          <th>Status</th>
+          <th>Reference</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in payments %}
+        <tr>
+          <td>{{ p.transaction_date.strftime('%Y-%m-%d') }}</td>
+          <td>${{ '%.2f'|format(p.amount) }}</td>
+          <td>{{ p.payment_type|title }}</td>
+          <td>{{ p.payment_method|title }}</td>
+          <td>
+            {% if p.status == 'completed' %}
+            <span class="badge bg-success">Completed</span>
+            {% elif p.status == 'pending' %}
+            <span class="badge bg-warning">Pending</span>
+            {% else %}
+            <span class="badge bg-secondary">{{ p.status|title }}</span>
+            {% endif %}
+          </td>
+          <td>{{ p.reference_id or '-' }}</td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="6" class="text-center text-muted">No payments found</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="mt-3">
+    <a href="{{ url_for('member_dashboard') }}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Back</a>
+  </div>
+</div>
+{% endblock %}
+
+
