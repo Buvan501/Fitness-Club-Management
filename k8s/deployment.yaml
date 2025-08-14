@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fitclub-pro
+  labels:
+    app: fitclub-pro
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fitclub-pro
+  template:
+    metadata:
+      labels:
+        app: fitclub-pro
+    spec:
+      containers:
+        - name: web
+          image: docker.io/${DOCKERHUB_USERNAME}/fitclub-pro:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          env:
+            - name: FLASK_ENV
+              value: production
+            - name: PORT
+              value: "8000"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 20
+
