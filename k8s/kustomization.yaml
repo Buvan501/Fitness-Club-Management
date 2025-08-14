@@ -6,7 +6,7 @@ resources:
   - service.yaml
 
 images:
-  - name: docker.io/buvan501/fitclub-pro
+  - name: docker.io/buvan2004/fitclub-pro
     newTag: latest
 
 
